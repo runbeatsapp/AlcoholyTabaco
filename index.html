@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LIBER — Sober & Smoke Free Tracker</title>
+    
+    <!-- Tailwind CSS v3 Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              zinc: {
+                950: '#09090b',
+                900: '#18181b',
+                800: '#27272a',
+                700: '#3f3f46',
+                500: '#71717a',
+                400: '#a1a1aa',
+                100: '#f4f4f5',
+                50: '#fafafa',
+              }
+            },
+            animation: {
+              'fadeIn': 'fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(6px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Mobile PWA optimization -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#09090b">
+    
+    <!-- Standard Styles -->
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #09090b;
+        color: #f4f4f5;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .font-display {
+        font-family: 'Space Grotesk', sans-serif;
+      }
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      /* Custom thin scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #09090b;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #27272a;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3f3f46;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen pb-16 bg-[#09090b] text-[#f4f4f5] selection:bg-emerald-500 selection:text-zinc-950">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      
+      <!-- HEADER -->
+      <header class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 pb-6 border-b border-zinc-900" id="app-header">
+        <div class="flex items-center gap-3">
+          <div class="p-2.5 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-lg shadow-emerald-500/10">
+            <svg class="w-6 h-6 text-zinc-950" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight font-display bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">LIBER</h1>
+            <p class="text-xs text-zinc-400 font-medium">Sober & Smoke Free Tracker</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button id="openConfigBtn" class="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-900/80 backdrop-blur-sm hover:bg-zinc-800 text-zinc-300 rounded-xl text-xs font-semibold transition border border-zinc-800 cursor-pointer shadow-sm">
+            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Configuración
+          </button>
+          <button id="restartBtn" class="flex items-center gap-1.5 px-3.5 py-2 bg-red-950/30 hover:bg-red-950/60 text-red-400 rounded-xl text-xs font-semibold transition border border-red-900/20 cursor-pointer shadow-sm">
+            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15H15"></path>
+            </svg>
+            Reiniciar
+          </button>
+        </div>
+      </header>
+
+      <!-- NO CONFIG PLACEHOLDER -->
+      <div id="noConfigView" class="hidden text-center py-12 px-6 bg-zinc-900/40 backdrop-blur-md rounded-2xl border border-zinc-800/80 mb-8 max-w-lg mx-auto" id="welcome-view">
+        <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+        </div>
+        <h2 class="text-xl font-bold font-display mb-2 text-[#f4f4f5]">Comienza tu nueva vida</h2>
+        <p class="text-zinc-400 text-sm mb-6 leading-relaxed">Configura tu perfil para empezar a contar cada segundo libre de humo y alcohol, visualizando tus progresos médicos y ahorros en tiempo real.</p>
+        <button id="startSetupBtn" class="px-5 py-3 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-zinc-950 font-bold rounded-xl transition shadow-lg shadow-emerald-500/25 text-sm cursor-pointer">
+          Configurar Perfil
+        </button>
+      </div>
+
+      <!-- MAIN DASHBOARD -->
+      <div id="dashboardView" class="space-y-6 hidden animate-fadeIn">
+        
+        <!-- STOPWATCH HERO -->
+        <div class="relative overflow-hidden bg-zinc-900/40 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-zinc-800/80 shadow-2xl text-center" id="stopwatch-container">
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-emerald-500/5 via-transparent to-transparent pointer-events-none"></div>
+          
+          <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase font-display bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/10">TIEMPO RECONQUISTADO</span>
+          
+          <div class="grid grid-cols-4 gap-2 sm:gap-4 max-w-xl mx-auto my-6">
+            <div class="bg-zinc-950/60 p-3 sm:p-4 rounded-xl border border-zinc-800/40">
+              <div id="stopwatch-days" class="text-3xl sm:text-5xl font-bold font-display text-[#f4f4f5]">00</div>
+              <div class="text-[10px] sm:text-xs text-zinc-400 font-medium tracking-wide uppercase mt-1">Días</div>
+            </div>
+            <div class="bg-zinc-950/60 p-3 sm:p-4 rounded-xl border border-zinc-800/40">
+              <div id="stopwatch-hours" class="text-3xl sm:text-5xl font-bold font-display text-[#f4f4f5]">00</div>
+              <div class="text-[10px] sm:text-xs text-zinc-400 font-medium tracking-wide uppercase mt-1">Horas</div>
+            </div>
+            <div class="bg-zinc-950/60 p-3 sm:p-4 rounded-xl border border-zinc-800/40">
+              <div id="stopwatch-minutes" class="text-3xl sm:text-5xl font-bold font-display text-[#f4f4f5]">00</div>
+              <div class="text-[10px] sm:text-xs text-zinc-400 font-medium tracking-wide uppercase mt-1">Minutos</div>
+            </div>
+            <div class="bg-zinc-950/60 p-3 sm:p-4 rounded-xl border border-zinc-800/40">
+              <div class="flex justify-center items-baseline">
+                <span id="stopwatch-seconds" class="text-3xl sm:text-5xl font-bold font-display text-emerald-400">00</span>
+                <span id="stopwatch-ms" class="text-lg sm:text-xl font-mono text-emerald-500/40 ml-0.5">.0</span>
+              </div>
+              <div class="text-[10px] sm:text-xs text-zinc-400 font-medium tracking-wide uppercase mt-1">Segundos</div>
+            </div>
+          </div>
+
+          <p id="quitDateText" class="text-xs text-zinc-400 italic font-sans">Libre desde el --/--/---- --:--</p>
+        </div>
+
+        <!-- TWO COLUMN IMPACT METRICS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="metrics-row">
+          
+          <!-- SAVINGS CARD -->
+          <div class="bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-800/80 flex flex-col justify-between" id="money-metric-card">
+            <div class="flex items-center justify-between mb-4">
+              <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-mono border border-emerald-500/10">EN VIVO</span>
+            </div>
+            <div>
+              <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider mb-1">Presupuesto Recuperado</p>
+              <div class="flex items-baseline gap-1">
+                <span id="currencySymbol" class="text-2xl sm:text-3xl font-bold text-[#f4f4f5]">€</span>
+                <span id="moneyCounter" class="text-3xl sm:text-4xl font-bold font-mono tracking-tight text-[#f4f4f5]">0.00000</span>
+              </div>
+              <p class="text-[10px] text-zinc-500 mt-2">Ahorro diario proyectado de <span id="dailySavingsText" class="font-semibold text-zinc-400">0.00€</span></p>
+            </div>
+          </div>
+
+          <!-- TOXINS AVOIDED CARD -->
+          <div class="bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-800/80" id="toxins-metric-card">
+            <div class="flex items-center justify-between mb-4">
+              <div class="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <span class="text-xs font-semibold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full font-mono border border-blue-500/10">BIENESTAR</span>
+            </div>
+            <p class="text-xs text-zinc-400 font-medium uppercase tracking-wider mb-3">Sustancias Tóxicas Evitadas</p>
+            
+            <div id="toxinsContainer" class="space-y-2.5 text-xs">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TIMELINE SECTION -->
+        <div class="bg-zinc-900/40 backdrop-blur-md p-6 rounded-2xl border border-zinc-800/80" id="recovery-timeline-card">
+          <h3 class="text-lg font-bold font-display text-white mb-6 flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Cronograma de Recuperación Biológica
+          </h3>
+
+          <div class="relative pl-6 border-l-2 border-zinc-800/80 space-y-6" id="timelineContainer">
+            <!-- Dynamically populated milestones -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONFIG CONFIGURATION MODAL -->
+      <div id="configModal" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden overflow-y-auto" id="config-modal-overlay">
+        <div class="bg-zinc-900/95 backdrop-blur-md rounded-2xl border border-zinc-800 p-6 w-full max-w-md my-8 relative shadow-2xl animate-fadeIn">
+          <h3 class="text-xl font-bold font-display text-[#f4f4f5] mb-1 flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Configurar Perfil de Progreso
+          </h3>
+          <p class="text-zinc-400 text-xs mb-5">Tus datos de consumo se almacenan 100% localmente en tu propio navegador.</p>
+
+          <form id="configForm" class="space-y-4 text-xs">
+            <!-- DATE & TIME QUIT -->
+            <div>
+              <label class="block text-zinc-300 font-semibold mb-1.5">¿Cuándo fue tu último consumo?</label>
+              <div class="grid grid-cols-2 gap-2">
+                <input type="date" id="formQuitDate" required class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 font-sans">
+                <input type="time" id="formQuitTime" required class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono">
+              </div>
+            </div>
+
+            <!-- CURRENCY SELECTOR -->
+            <div>
+              <label class="block text-zinc-300 font-semibold mb-1.5">Moneda Preferida</label>
+              <select id="formCurrency" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+                <option value="€">EUR (€)</option>
+                <option value="$">USD ($)</option>
+                <option value="£">GBP (£)</option>
+                <option value="MXN$">MXN (MXN$)</option>
+                <option value="ARS$">ARS (ARS$)</option>
+                <option value="COP$">COP (COP$)</option>
+                <option value="CLP$">CLP (CLP$)</option>
+              </select>
+            </div>
+
+            <!-- SMOKING OPTION -->
+            <div class="border-t border-zinc-800/80 pt-3">
+              <label class="flex items-center gap-2 mb-2 cursor-pointer">
+                <input type="checkbox" id="formQuitSmoking" checked class="rounded bg-zinc-950 border-zinc-800 text-emerald-500 focus:ring-emerald-500/50">
+                <span class="text-sm font-semibold text-white">Quiero dejar el Tabaco</span>
+              </label>
+
+              <div id="tobaccoInputs" class="space-y-2.5 pl-6">
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-zinc-400 mb-1">Cigarrillos al día</label>
+                    <input type="number" id="formCigarettesPerDay" min="1" value="20" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-zinc-400 mb-1">Precio por paquete</label>
+                    <input type="number" id="formPackCost" min="0" step="0.01" value="6.50" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-zinc-400 mb-1">Cigarrillos por paquete (unidades)</label>
+                  <input type="number" id="formPackSize" min="1" value="20" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                </div>
+              </div>
+            </div>
+
+            <!-- ALCOHOL OPTION -->
+            <div class="border-t border-zinc-800/80 pt-3">
+              <label class="flex items-center gap-2 mb-2 cursor-pointer">
+                <input type="checkbox" id="formQuitAlcohol" checked class="rounded bg-zinc-950 border-zinc-800 text-emerald-500 focus:ring-emerald-500/50">
+                <span class="text-sm font-semibold text-white">Quiero dejar el Alcohol</span>
+              </label>
+
+              <div id="alcoholInputs" class="grid grid-cols-2 gap-2 pl-6">
+                <div>
+                  <label class="block text-zinc-400 mb-1">Tragos por semana</label>
+                  <input type="number" id="formDrinksPerWeek" min="1" value="10" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                  <label class="block text-zinc-400 mb-1">Costo medio por trago</label>
+                  <input type="number" id="formDrinkCost" min="0" step="0.01" value="5.00" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBMIT BUTTONS -->
+            <div class="flex gap-2 pt-4 border-t border-zinc-800/80">
+              <button type="button" id="closeConfigModalBtn" class="flex-1 bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 py-2.5 rounded-xl font-medium transition cursor-pointer text-xs">
+                Cancelar
+              </button>
+              <button type="submit" class="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-400 hover:to-blue-400 text-zinc-950 font-bold py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20 cursor-pointer text-xs">
+                Guardar Perfil
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- RESTART DOUBLE CONFIRM MODAL -->
+      <div id="restartModal" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden" id="restart-modal-overlay">
+        <div class="bg-zinc-900/95 backdrop-blur-md rounded-2xl border border-zinc-800 p-6 w-full max-w-sm text-center relative shadow-2xl animate-fadeIn">
+          <div class="w-12 h-12 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold font-display text-[#f4f4f5] mb-1">¿Deseas reiniciar tu progreso?</h3>
+          <p class="text-zinc-400 text-xs mb-4">Esta acción restablecerá tu fecha de inicio a la hora actual. Perderás el tiempo acumulado hasta ahora.</p>
+
+          <div class="space-y-3">
+            <div class="text-left">
+              <label class="block text-zinc-400 text-[10px] mb-1">Escribe <span class="text-red-400 font-bold font-mono">REINICIAR</span> para confirmar:</label>
+              <input type="text" id="confirmRestartInput" placeholder="Escribe aquí..." class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-center text-white focus:outline-none focus:border-red-500 text-xs uppercase font-mono tracking-wider">
+            </div>
+
+            <div class="flex gap-2">
+              <button id="cancelRestartBtn" class="flex-1 bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer">
+                No, mantener
+              </button>
+              <button id="confirmRestartBtn" disabled class="flex-1 bg-red-600 hover:bg-red-500 disabled:bg-zinc-800 disabled:text-zinc-600 text-white py-1.5 rounded-lg text-xs font-bold transition cursor-pointer">
+                Sí, reiniciar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CORE AUTONOMOUS JS SCRIPT -->
+    <script>
+      // Scientific milestones list
+      const MILESTONES = [
+        {
+          id: "2h",
+          hours: 2,
+          title: "Baja el Nerviosismo",
+          shortDesc: "Los primeros síntomas de inquietud empiezan a disiparse.",
+          longDesc: "La decisión consciente de abandonar el consumo activa respuestas calmantes en el sistema nervioso autónomo. La presión arterial comienza a estabilizarse y disminuyen los picos de adrenalina inicial.",
+          category: "general"
+        },
+        {
+          id: "4h",
+          hours: 4,
+          title: "Aumento de la Autoestima",
+          shortDesc: "El orgullo de mantener tu decisión refuerza tu bienestar emocional.",
+          longDesc: "Superar las primeras horas de tentación produce una liberación natural de endorfinas ligada a la auto-superación. Sentir que retomas las riendas de tu vida fortalece tu autovaloración.",
+          category: "general"
+        },
+        {
+          id: "6h",
+          hours: 6,
+          title: "Más Seguridad Personal",
+          shortDesc: "Te sientes más seguro y con total control de tu camino.",
+          longDesc: "La incertidumbre y las dudas de los primeros instantes se transforman en una convicción firme. Te reconoces a ti mismo con la capacidad y seguridad para afrontar tus rutinas diarias con éxito.",
+          category: "general"
+        },
+        {
+          id: "8h",
+          hours: 8,
+          title: "Estabilización del Oxígeno",
+          shortDesc: "Reducción de los primeros picos de ansiedad química.",
+          longDesc: "Los niveles de oxígeno en tu sangre vuelven a la normalidad. La nicotina y el monóxido de carbono circulante se reducen a la mitad, aliviando la carga sobre tu corazón.",
+          category: "smoke"
+        },
+        {
+          id: "12h",
+          hours: 12,
+          title: "Monóxido de Carbono Cero",
+          shortDesc: "Mejora la oxigenación celular en el cerebro.",
+          longDesc: "El nivel de monóxido de carbono en sangre se normaliza. Los pulmones comienzan a despejar la mucosidad y los residuos. Te sentirás con la mente más clara.",
+          category: "smoke"
+        },
+        {
+          id: "24h",
+          hours: 24,
+          title: "Desinflamación Sistémica",
+          shortDesc: "Disminuye drásticamente la inflamación del cuerpo.",
+          longDesc: "El riesgo de ataque cardíaco disminuye drásticamente. Tu cuerpo inicia una limpieza celular profunda y la inflamación de tus vasos sanguíneos se reduce.",
+          category: "general"
+        },
+        {
+          id: "48h",
+          hours: 48,
+          title: "Regeneración Sensorial",
+          shortDesc: "Las terminaciones nerviosas comienzan a regenerarse.",
+          longDesc: "Tus terminaciones nerviosas se adaptan a la ausencia de toxinas. El sentido del gusto y el olfato se agudizan notablemente. La comida empieza a saber increíble.",
+          category: "general"
+        },
+        {
+          id: "72h",
+          hours: 72,
+          title: "Alivio del Sistema Nervioso",
+          shortDesc: "Mejoras notables en el ciclo de sueño y descanso.",
+          longDesc: "El sistema nervioso central se estabiliza. Los bronquios se relajan facilitando la respiración. Tu ciclo de sueño entra en fase de descanso profundo y reparador.",
+          category: "general"
+        },
+        {
+          id: "1w",
+          hours: 168,
+          title: "Piel Radiante y Dopamina",
+          shortDesc: "Rehidratación facial y aumento de dopamina natural.",
+          longDesc: "La piel se oxigena y rehidrata, mejorando el tono facial y reduciendo ojeras. Tu cerebro estabiliza la producción de dopamina natural, mejorando el ánimo y la autoestima.",
+          category: "general"
+        },
+        {
+          id: "2w",
+          hours: 336,
+          title: "Retorno del Vigor Pulmonar",
+          shortDesc: "Mejora la circulación y la capacidad pulmonar.",
+          longDesc: "La función pulmonar aumenta hasta un 30%. Sientes un incremento drástico en tus niveles de energía diarios. Subir escaleras o correr ya no se siente como un desafío extremo.",
+          category: "general"
+        },
+        {
+          id: "1m",
+          hours: 720,
+          title: "Renacimiento Cardiovascular",
+          shortDesc: "Regeneración endotelial y fin de la fatiga crónica.",
+          longDesc: "La tos, la congestión y la fatiga crónica desaparecen casi por completo. Las arterias recuperan su elasticidad original (endotelio vascular regenerado), reduciendo significativamente el riesgo coronario.",
+          category: "general"
+        }
+      ];
+
+      // Load state from LocalStorage
+      let config = JSON.parse(localStorage.getItem("sober_tracker_config"));
+
+      // Element References
+      const noConfigView = document.getElementById("noConfigView");
+      const dashboardView = document.getElementById("dashboardView");
+      const configModal = document.getElementById("configModal");
+      const restartModal = document.getElementById("restartModal");
+      const configForm = document.getElementById("configForm");
+
+      // Buttons
+      const openConfigBtn = document.getElementById("openConfigBtn");
+      const restartBtn = document.getElementById("restartBtn");
+      const startSetupBtn = document.getElementById("startSetupBtn");
+      const closeConfigModalBtn = document.getElementById("closeConfigModalBtn");
+      const cancelRestartBtn = document.getElementById("cancelRestartBtn");
+      const confirmRestartBtn = document.getElementById("confirmRestartBtn");
+
+      // Inputs
+      const formQuitDate = document.getElementById("formQuitDate");
+      const formQuitTime = document.getElementById("formQuitTime");
+      const formCurrency = document.getElementById("formCurrency");
+      const formQuitSmoking = document.getElementById("formQuitSmoking");
+      const formCigarettesPerDay = document.getElementById("formCigarettesPerDay");
+      const formPackCost = document.getElementById("formPackCost");
+      const formPackSize = document.getElementById("formPackSize");
+      const formQuitAlcohol = document.getElementById("formQuitAlcohol");
+      const formDrinksPerWeek = document.getElementById("formDrinksPerWeek");
+      const formDrinkCost = document.getElementById("formDrinkCost");
+      const confirmRestartInput = document.getElementById("confirmRestartInput");
+
+      // Outputs
+      const swDays = document.getElementById("stopwatch-days");
+      const swHours = document.getElementById("stopwatch-hours");
+      const swMinutes = document.getElementById("stopwatch-minutes");
+      const swSeconds = document.getElementById("stopwatch-seconds");
+      const swMs = document.getElementById("stopwatch-ms");
+      const quitDateText = document.getElementById("quitDateText");
+      const currencySymbol = document.getElementById("currencySymbol");
+      const moneyCounter = document.getElementById("moneyCounter");
+      const dailySavingsText = document.getElementById("dailySavingsText");
+      const toxinsContainer = document.getElementById("toxinsContainer");
+      const timelineContainer = document.getElementById("timelineContainer");
+
+      // Keep track of expanded milestone state
+      const expandedMilestones = {};
+
+      // Toggle configuration inputs based on check state
+      formQuitSmoking.addEventListener("change", () => {
+        document.getElementById("tobaccoInputs").style.display = formQuitSmoking.checked ? "block" : "none";
+      });
+      formQuitAlcohol.addEventListener("change", () => {
+        document.getElementById("alcoholInputs").style.display = formQuitAlcohol.checked ? "grid" : "none";
+      });
+
+      function initApp() {
+        if (!config) {
+          noConfigView.classList.remove("hidden");
+          dashboardView.classList.add("hidden");
+        } else {
+          noConfigView.classList.add("hidden");
+          dashboardView.classList.remove("hidden");
+          updateDashboardStatic();
+          startTicking();
+        }
+      }
+
+      function updateDashboardStatic() {
+        if (!config) return;
+        const d = new Date(config.quitDate);
+        
+        // Render pretty local date format
+        quitDateText.innerText = "Libre desde el " + d.toLocaleDateString() + " a las " + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        currencySymbol.innerText = config.currency;
+
+        // Daily savings calculation
+        const dailySmoking = config.quitSmoking ? (config.cigarettesPerDay * (config.packCost / config.packSize)) : 0;
+        const dailyAlcohol = config.quitAlcohol ? (config.drinksPerWeek * config.drinkCost) / 7 : 0;
+        const dailyTotal = dailySmoking + dailyAlcohol;
+        dailySavingsText.innerText = dailyTotal.toFixed(2) + " " + config.currency + " al día";
+      }
+
+      let activeInterval;
+      function startTicking() {
+        if (activeInterval) clearInterval(activeInterval);
+        
+        activeInterval = setInterval(() => {
+          if (!config) return;
+          const quitTime = new Date(config.quitDate).getTime();
+          const elapsed = Math.max(0, Date.now() - quitTime);
+          const hours = elapsed / (1000 * 60 * 60);
+          const days = hours / 24;
+
+          // Update stopwatch digits
+          const d = Math.floor(days);
+          const h = Math.floor(hours % 24);
+          const m = Math.floor((elapsed / (1000 * 60)) % 60);
+          const s = Math.floor((elapsed / 1000) % 60);
+          const ms = Math.floor((elapsed % 1000) / 100);
+
+          swDays.innerText = String(d).padStart(2, '0');
+          swHours.innerText = String(h).padStart(2, '0');
+          swMinutes.innerText = String(m).padStart(2, '0');
+          swSeconds.innerText = String(s).padStart(2, '0');
+          swMs.innerText = "." + ms;
+
+          // Live money counter up to 5 decimals
+          const dailySmoking = config.quitSmoking ? (config.cigarettesPerDay * (config.packCost / config.packSize)) : 0;
+          const dailyAlcohol = config.quitAlcohol ? (config.drinksPerWeek * config.drinkCost) / 7 : 0;
+          const dailyTotal = dailySmoking + dailyAlcohol;
+          const savedSoFar = (dailyTotal / 24) * hours;
+          moneyCounter.innerText = savedSoFar.toFixed(5);
+
+          // Render live toxines avoided
+          let toxinsHTML = "";
+          if (config.quitSmoking) {
+            const cigs = (config.cigarettesPerDay / 24) * hours;
+            toxinsHTML += `
+              <div class="flex justify-between items-center bg-zinc-950/40 p-2.5 rounded-xl border border-zinc-800/40">
+                <span class="text-zinc-400 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 14v6m-3-3h6M6 10h2m-2 4h2m-6 4h18a2 2 0 002-2V7a2 2 0 00-2-2H3a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                  Cigarrillos evitados
+                </span>
+                <span class="font-mono text-emerald-400 font-semibold">${cigs.toFixed(1)} ud</span>
+              </div>
+              <div class="flex justify-between items-center bg-zinc-950/40 p-2.5 rounded-xl border border-zinc-800/40">
+                <span class="text-zinc-400 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                  Alquitrán filtrado
+                </span>
+                <span class="font-mono text-[#f4f4f5] font-semibold">${(cigs * 10).toFixed(1)} mg</span>
+              </div>
+              <div class="flex justify-between items-center bg-zinc-950/40 p-2.5 rounded-xl border border-zinc-800/40">
+                <span class="text-zinc-400 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                  Nicotina evitada
+                </span>
+                <span class="font-mono text-cyan-400 font-semibold">${(cigs * 1).toFixed(2)} mg</span>
+              </div>
+              <div class="flex justify-between items-center bg-zinc-950/40 p-2.5 rounded-xl border border-zinc-800/40">
+                <span class="text-zinc-400 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  Monóxido evitado
+                </span>
+                <span class="font-mono text-gray-300 font-semibold">${(cigs * 15).toFixed(0)} mg</span>
+              </div>
+            `;
+          }
+          if (config.quitAlcohol) {
+            const drinks = (config.drinksPerWeek / (7 * 24)) * hours;
+            toxinsHTML += `
+              <div class="flex justify-between items-center bg-zinc-950/40 p-2.5 rounded-xl border border-zinc-800/40">
+                <span class="text-zinc-400 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                  Tragos rechazados
+                </span>
+                <span class="font-mono text-purple-400 font-semibold">${drinks.toFixed(1)} ud</span>
+              </div>
+              <div class="flex justify-between items-center bg-zinc-950/40 p-2.5 rounded-xl border border-zinc-800/40">
+                <span class="text-zinc-400 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                  Alcohol puro evitado
+                </span>
+                <span class="font-mono text-red-400 font-semibold">${(drinks * 14).toFixed(1)} g</span>
+              </div>
+            `;
+          }
+          if (!config.quitSmoking && !config.quitAlcohol) {
+            toxinsHTML = "<div class='text-center text-zinc-500 py-4 italic'>Ninguna sustancia configurada.</div>";
+          }
+          toxinsContainer.innerHTML = toxinsHTML;
+
+          // Render Biological Recovery Timeline dynamically
+          let timelineHTML = "";
+          MILESTONES.forEach(m => {
+            const targetMs = m.hours * 60 * 60 * 1000;
+            const isCompleted = elapsed >= targetMs;
+            const progress = Math.min(100, (elapsed / targetMs) * 100);
+            const isExpanded = !!expandedMilestones[m.id];
+            
+            // Choose icon for each milestone
+            let iconColor = isCompleted ? "text-emerald-400" : "text-zinc-600";
+            let milestoneIcon = '';
+            if (m.hours === 2) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364.364l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 113.536 0V21h2v-2.243a4.978 4.978 0 01-1 0z"></path></svg>`;
+            else if (m.hours === 4) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.36 1.24.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.175 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.97-2.883c-.773-.57-.373-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>`;
+            else if (m.hours === 6) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>`;
+            else if (m.hours === 8) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
+            else if (m.hours === 12) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
+            else if (m.hours === 24) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>`;
+            else if (m.hours === 48) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`;
+            else if (m.hours === 72) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            else if (m.hours === 168) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>`;
+            else if (m.hours === 336) milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`;
+            else milestoneIcon = `<svg class="w-4 h-4 ${iconColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            let badgeColor = isCompleted ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-zinc-950 text-zinc-500 border-zinc-800";
+            let opacity = isCompleted ? "opacity-100" : "opacity-50 hover:opacity-85 transition";
+            let formattedLimit = m.hours < 24 ? m.hours + ' Horas' : (m.hours === 24 ? '1 Día' : (m.hours === 168 ? '1 Semana' : (m.hours === 336 ? '2 Semanas' : '1 Mes')));
+            
+            let statusText = isCompleted 
+              ? `<span class="text-emerald-400 font-semibold flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Desbloqueado</span>` 
+              : `<span class="text-zinc-500 font-mono">${progress.toFixed(0)}% • Faltan ${formatRemainingTime(targetMs - elapsed)}</span>`;
+
+            timelineHTML += `
+              <div class="relative group ${opacity}">
+                <!-- Circle line-indicator -->
+                <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full border-2 transition-all duration-300 ${isCompleted ? 'bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/50' : 'bg-zinc-950 border-zinc-800'}"></div>
+                
+                <!-- Main card -->
+                <div class="bg-zinc-900/40 hover:bg-zinc-900/80 p-4 rounded-xl border ${isCompleted ? 'border-emerald-500/20' : 'border-zinc-800/80'} ${isExpanded ? 'ring-1 ring-emerald-500/30' : ''} transition-all cursor-pointer" onclick="toggleMilestone('${m.id}')">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                      ${milestoneIcon}
+                      <span>${m.title}</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded-md border font-normal ${badgeColor}">${formattedLimit}</span>
+                    </h4>
+                    <div class="text-[11px] font-medium">${statusText}</div>
+                  </div>
+                  <p class="text-xs text-zinc-400 leading-relaxed pr-6">${m.shortDesc}</p>
+                  
+                  <!-- Expanded detailed explanation -->
+                  <div id="desc-${m.id}" class="${isExpanded ? 'block' : 'hidden'} mt-3 pt-3 border-t border-zinc-800/60 text-xs text-zinc-300 leading-relaxed animate-fadeIn">
+                    <p class="mb-1.5 text-zinc-400 font-medium">¿Qué está pasando en tu cuerpo?</p>
+                    ${m.longDesc}
+                  </div>
+                  
+                  <div class="flex justify-end text-zinc-600 group-hover:text-zinc-400 transition-colors mt-2">
+                    <svg class="w-4 h-4 transform ${isExpanded ? 'rotate-180' : ''} transition-transform duration-250" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          timelineContainer.innerHTML = timelineHTML;
+
+        }, 100);
+      }
+
+      function formatRemainingTime(ms) {
+        const hours = Math.floor(ms / (1000 * 60 * 60));
+        const mins = Math.floor((ms / (1000 * 60)) % 60);
+        if (hours >= 24) {
+          const days = Math.floor(hours / 24);
+          const remHours = hours % 24;
+          return days + "d " + remHours + "h";
+        }
+        return hours + "h " + mins + "m";
+      }
+
+      // Expose function globally to toggle expanded description state
+      window.toggleMilestone = function(id) {
+        expandedMilestones[id] = !expandedMilestones[id];
+        // Re-run ticks or DOM sync to update views instantly
+        // Since the next tick (100ms) will replace innerHTML and preserve expand state,
+        // it updates beautifully on the next tick automatically!
+      }
+
+      // Open profile configurator
+      openConfigBtn.addEventListener("click", () => {
+        if (config) {
+          // Pre-populate configuration values
+          const localDateObj = new Date(config.quitDate);
+          
+          // Get local ISO date string correctly
+          const year = localDateObj.getFullYear();
+          const month = String(localDateObj.getMonth() + 1).padStart(2, '0');
+          const day = String(localDateObj.getDate()).padStart(2, '0');
+          const hour = String(localDateObj.getHours()).padStart(2, '0');
+          const minute = String(localDateObj.getMinutes()).padStart(2, '0');
+
+          formQuitDate.value = year + "-" + month + "-" + day;
+          formQuitTime.value = hour + ":" + minute;
+
+          formQuitSmoking.checked = config.quitSmoking;
+          formCigarettesPerDay.value = config.cigarettesPerDay;
+          formPackCost.value = config.packCost;
+          formPackSize.value = config.packSize;
+
+          formQuitAlcohol.checked = config.quitAlcohol;
+          formDrinksPerWeek.value = config.drinksPerWeek;
+          formDrinkCost.value = config.drinkCost;
+          formCurrency.value = config.currency;
+
+          document.getElementById("tobaccoInputs").style.display = config.quitSmoking ? "block" : "none";
+          document.getElementById("alcoholInputs").style.display = config.quitAlcohol ? "grid" : "none";
+        } else {
+          // Defaults if empty
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          const hour = String(now.getHours()).padStart(2, '0');
+          const minute = String(now.getMinutes()).padStart(2, '0');
+
+          formQuitDate.value = year + "-" + month + "-" + day;
+          formQuitTime.value = hour + ":" + minute;
+          
+          formQuitSmoking.checked = true;
+          formCigarettesPerDay.value = "20";
+          formPackCost.value = "6.50";
+          formPackSize.value = "20";
+
+          formQuitAlcohol.checked = true;
+          formDrinksPerWeek.value = "10";
+          formDrinkCost.value = "5.00";
+          formCurrency.value = "€";
+
+          document.getElementById("tobaccoInputs").style.display = "block";
+          document.getElementById("alcoholInputs").style.display = "grid";
+        }
+        configModal.classList.remove("hidden");
+      });
+
+      startSetupBtn.addEventListener("click", () => {
+        openConfigBtn.click();
+      });
+
+      closeConfigModalBtn.addEventListener("click", () => {
+        if (!config) {
+          alert("Por favor, guarda tu perfil inicial para poder comenzar.");
+          return;
+        }
+        configModal.classList.add("hidden");
+      });
+
+      // Restart progress modal logic
+      restartBtn.addEventListener("click", () => {
+        restartModal.classList.remove("hidden");
+        confirmRestartInput.value = "";
+        confirmRestartBtn.disabled = true;
+      });
+
+      cancelRestartBtn.addEventListener("click", () => {
+        restartModal.classList.add("hidden");
+        confirmRestartInput.value = "";
+      });
+
+      confirmRestartInput.addEventListener("input", () => {
+        confirmRestartBtn.disabled = confirmRestartInput.value.toUpperCase() !== "REINICIAR";
+      });
+
+      // Config form submissions
+      configForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const fullDateStr = formQuitDate.value + "T" + formQuitTime.value;
+        const quitDateObj = new Date(fullDateStr);
+
+        if (isNaN(quitDateObj.getTime())) {
+          alert("Por favor introduce una fecha y hora válidas.");
+          return;
+        }
+
+        config = {
+          quitDate: quitDateObj.toISOString(),
+          quitSmoking: formQuitSmoking.checked,
+          cigarettesPerDay: Number(formCigarettesPerDay.value) || 0,
+          packCost: Number(formPackCost.value) || 0,
+          packSize: Number(formPackSize.value) || 20,
+          quitAlcohol: formQuitAlcohol.checked,
+          drinksPerWeek: Number(formDrinksPerWeek.value) || 0,
+          drinkCost: Number(formDrinkCost.value) || 0,
+          currency: formCurrency.value
+        };
+
+        localStorage.setItem("sober_tracker_config", JSON.stringify(config));
+        configModal.classList.add("hidden");
+        initApp();
+      });
+
+      confirmRestartBtn.addEventListener("click", () => {
+        if (confirmRestartInput.value.toUpperCase() === "REINICIAR") {
+          if (!config) return;
+          config.quitDate = new Date().toISOString();
+          localStorage.setItem("sober_tracker_config", JSON.stringify(config));
+          restartModal.classList.add("hidden");
+          confirmRestartInput.value = "";
+          initApp();
+        }
+      });
+
+      // Bootstrap app on DOM load
+      initApp();
+    </script>
+  </body>
+</html>
