@@ -1,0 +1,6 @@
+{
+  "name": "LIBER by runbeats",
+  "description": "A tracker that calculates time elapsed since quitting smoking and alcohol, showing health recovery milestones, money saved, and toxins avoided.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
